@@ -1,0 +1,65 @@
+#!/bin/bash
+# grub2-verify
+# Checks the signatures of every file which is has a signature in /boot.
+# Author: Bandie Kojote
+# Licence: GNU-GPLv3
+
+errorcounter=0
+filecounter=0
+
+
+# Signature check part + error counter + file counter + file list
+
+echo "Checking signatures in /boot..."  
+for i in `find /boot -name "*.sig"` 
+do 
+    gpg --verify-files $i > /dev/null 2>&1
+    if [ $? -ne 0 ]
+    then
+        ((errorcounter++))
+        files[$errorcounter]=$i
+    fi
+    ((filecounter++))
+done
+# Nothing to verify? Exit 2.
+if [ $filecounter -eq 0 ]
+then
+    echo "Nothing to verify."
+    exit 2
+fi
+
+
+
+# Message
+
+echo -ne "There has been "
+if [ $errorcounter -eq 0 ]
+then
+    echo -ne "\e[1;32mno\e[0m"
+else
+    echo -ne "\e[1;31m$errorcounter\e[0m"
+fi
+if [ $errorcounter -eq 1 ]
+then
+    echo " bad signature."
+else
+    echo " bad signatures."
+fi
+
+
+
+# File list and exit codes
+
+if [ $errorcounter -gt 0 ]
+then
+    for(( i=1; i<=${#files[@]}; i++))
+    do
+        echo "BAD signature: ${files[$i]}"
+    done
+    exit 1
+else
+    exit 0
+fi
+
+# WHAT?!
+exit 666 
