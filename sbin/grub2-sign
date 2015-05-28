@@ -21,6 +21,7 @@ for i in `find /boot -name "*.cfg" -or -name "*.lst" -or \
  -name "grubenv" -or -name "*.asc" -or -name "*.pf2"`;
 do
     # Signing
+
     gpg --batch --detach-sign --no-tty $i
     if [ $? -eq 0 ]
     then
