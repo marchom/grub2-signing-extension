@@ -6,13 +6,13 @@ all:
 	@printf "Nothing to make. Run make install.\n"
 
 install:
-	cp ./sbin/grub2-verify /usr/sbin/
-	cp ./sbin/grub2-sign /usr/sbin/
-	cp ./sbin/grub2-unsign /usr/sbin/
-	chown root:root /usr/sbin/grub2-{verify,sign,unsign}
-	chmod 700 /usr/sbin/grub2-{verify,sign,unsign}
+	cp ./sbin/grub-verify /usr/sbin/
+	cp ./sbin/grub-sign /usr/sbin/
+	cp ./sbin/grub-unsign /usr/sbin/
+	chown root:root /usr/sbin/grub-{verify,sign,unsign}
+	chmod 700 /usr/sbin/grub-{verify,sign,unsign}
 	@printf "Done.\n"
 
 uninstall:
-	rm /usr/sbin/grub2-{verify,sign,unsign}
+	rm /usr/sbin/grub-{verify,sign,unsign}
 	@printf "Done.\n"

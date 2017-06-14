@@ -1,0 +1,39 @@
+#!/bin/bash
+# grub2-sign
+# Signs everything important in /boot. Depends on grub2-verify.
+# Author: Bandie Kojote
+# Licence: GNU-GPLv3
+
+
+# Running grub-verify first to prevent double signing
+echo "Running grub-verify to check if everything is unsigned..."
+grub-verify
+if [ $? -lt 2 ]
+then
+    echo "Run grub-unsign first."
+    exit 1
+fi
+
+
+# Find GRUB2 datas
+for i in `find /boot -name "*.cfg" -or -name "*.lst" -or \
+ -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*" -or \
+ -name "grubenv" -or -name "*.asc" -or -name "*.pf2" -or \
+ -name "*.efi" -or -name "*.elf" -or -name "*.bin" -or \
+ -name "*-generic" -or -name "*.jpg" -or -name "*.png" -or -name "*.mo"`;
+do
+    # Signing
+
+    gpg --batch --detach-sign --no-tty $i
+    if [ $? -eq 0 ]
+    then
+        echo "$i signed."
+    else
+        echo "ERROR!"
+	break
+    fi
+done
+
+
+echo "Done!"
+exit 0

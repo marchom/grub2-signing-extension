@@ -4,10 +4,15 @@
 # Author: Bandie Kojote
 # Licence: GNU-GPLv3
 
-# Check if something is wrong
-if ! grub2-verify; then
-    printf '%s\n' "grub2-verify has detected a one or more bad signatures." "Please check for malicious software before you're unsigning everything!" >&2
-    exit 1
+if [[ "$@" == "-f" ]]
+then
+    printf '%s\n' "Skipping signature verification!!!" >&2
+else
+    # Check if something is wrong
+    if ! grub-verify; then
+        printf '%s\n' "grub2-verify has detected a one or more bad signatures." "Please check for malicious software before you're unsigning everything!" >&2
+        exit 1
+    fi
 fi
 
 # Then remove the signatures.
